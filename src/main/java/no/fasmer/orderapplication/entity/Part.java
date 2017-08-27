@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
@@ -31,7 +33,7 @@ import static javax.persistence.TemporalType.DATE;
 @NamedQuery(name = "findAllParts", query = "SELECT p FROM Part p ORDER BY p.partNumber")
 public class Part implements Serializable {
     
-    private String partNumber;
+    private Long partNumber;
     private int revision;
     private String description;
     private Date revisionDate;
@@ -46,14 +48,12 @@ public class Part implements Serializable {
     }
 
     public Part(
-            String partNumber, 
             int revision, 
             String description, 
             Date revisionDate, 
             Serializable drawing, 
             String specification) {
         
-        this.partNumber = partNumber;
         this.revision = revision;
         this.description = description;
         this.revisionDate = revisionDate;
@@ -64,7 +64,6 @@ public class Part implements Serializable {
     }
 
     public Part(
-            String partNumber, 
             int revision, 
             String description, 
             Date revisionDate, 
@@ -74,7 +73,6 @@ public class Part implements Serializable {
             List<Part> parts, 
             VendorPart vendorPart) {
         
-        this.partNumber = partNumber;
         this.revision = revision;
         this.description = description;
         this.revisionDate = revisionDate;
@@ -87,12 +85,13 @@ public class Part implements Serializable {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    public String getPartNumber() {
+    public Long getPartNumber() {
         return partNumber;
     }
 
-    public void setPartNumber(String partNumber) {
+    public void setPartNumber(Long partNumber) {
         this.partNumber = partNumber;
     }
 

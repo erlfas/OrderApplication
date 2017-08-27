@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -34,9 +36,8 @@ public class CustomerOrder implements Serializable {
         this.lineItems = new ArrayList<>();
     }
     
-    public CustomerOrder(Integer orderId, char status, int discount, 
+    public CustomerOrder(char status, int discount, 
             String shipmentInfo) {
-        this.orderId = orderId;
         this.status = status;
         this.discount = discount;
         this.shipmentInfo = shipmentInfo;
@@ -45,6 +46,7 @@ public class CustomerOrder implements Serializable {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getOrderId() {
         return orderId;
     }

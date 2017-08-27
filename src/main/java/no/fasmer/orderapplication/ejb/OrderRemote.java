@@ -11,8 +11,7 @@ import no.fasmer.orderapplication.entity.Part;
 @Remote
 public interface OrderRemote {
     
-    void createPart(String partNumber,
-            int revision,
+    void createPart(int revision,
             String description,
             Date revisionDate,
             String specification,
@@ -25,8 +24,7 @@ public interface OrderRemote {
             String partNumber,
             int revision);
     
-    void createVendor(int vendorId,
-            String name,
+    void createVendor(String name,
             String address,
             String contact,
             String phone);
@@ -37,7 +35,9 @@ public interface OrderRemote {
             double price,
             int vendorId);
     
-    void createOrder(Integer orderId, char status, int discount, String shipmentInfo);
+    void createOrder(char status, int discount, String shipmentInfo);
+    
+    void createOrder(CustomerOrder customerOrder);
     
     List<CustomerOrder> getOrders();
     

@@ -6,6 +6,8 @@ import java.util.Collection;
 import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -39,8 +41,7 @@ public class Vendor implements Serializable {
     public Vendor() {
     }
     
-    public Vendor(int vendorId, String name, String address, String contact, String phone) {
-        this.vendorId = vendorId;
+    public Vendor(String name, String address, String contact, String phone) {
         this.name = name;
         this.address = address;
         this.contact = contact;
@@ -48,8 +49,7 @@ public class Vendor implements Serializable {
         this.vendorParts = new ArrayList<>();
     }
 
-    public Vendor(int vendorId, String name, String address, String contact, String phone, Collection<VendorPart> vendorParts) {
-        this.vendorId = vendorId;
+    public Vendor(String name, String address, String contact, String phone, Collection<VendorPart> vendorParts) {
         this.name = name;
         this.address = address;
         this.contact = contact;
@@ -58,6 +58,7 @@ public class Vendor implements Serializable {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getVendorId() {
         return vendorId;
     }

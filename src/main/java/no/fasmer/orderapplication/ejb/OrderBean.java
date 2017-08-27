@@ -24,7 +24,7 @@ import no.fasmer.orderapplication.entity.Vendor;
 import no.fasmer.orderapplication.entity.VendorPart;
 
 @Stateless
-public class OrderBean implements OrderRemote {
+public class OrderBean {
 
     @Inject
     private CustomerOrderDao customerOrderDao;
@@ -44,9 +44,7 @@ public class OrderBean implements OrderRemote {
     @Inject
     private Logger logger;
 
-    @Override
-    public void createPart(String partNumber,
-            int revision,
+    public void createPart(int revision,
             String description,
             Date revisionDate,
             String specification,
@@ -54,27 +52,24 @@ public class OrderBean implements OrderRemote {
 
         try {
 
-            final Part part = new Part(partNumber,
-                    revision,
+            final Part part = new Part(revision,
                     description,
                     revisionDate,
                     drawing,
                     specification);
 
-            logger.log(Level.INFO, "Created part {0}-{1}", new Object[]{partNumber, revision});
+            logger.log(Level.INFO, "Created part with revision {0}", new Object[]{revision});
             partDao.persist(part);
-            logger.log(Level.INFO, "Persisted part {0}-{1}", new Object[]{partNumber, revision});
+            logger.log(Level.INFO, "Persisted part revision {0}", new Object[]{revision});
         } catch (Exception ex) {
             throw new EJBException(ex.getMessage());
         }
     }
 
-    @Override
     public List<Part> getAllParts() {
         return partDao.getAllParts();
     }
 
-    @Override
     public void addPartToBillOfMaterial(String bomPartNumber,
             int bomRevision,
             String partNumber,
@@ -99,26 +94,24 @@ public class OrderBean implements OrderRemote {
         }
     }
 
-    @Override
-    public void createVendor(int vendorId,
-            String name,
+    public void createVendor(String name,
             String address,
             String contact,
             String phone) {
         try {
-            final Vendor vendor = new Vendor(vendorId, name, address, contact, phone);
+            final Vendor vendor = new Vendor(name, address, contact, phone);
             vendorDao.persist(vendor);
         } catch (Exception e) {
             throw new EJBException(e);
         }
     }
 
-    @Override
     public void createVendorPart(String partNumber,
             int revision,
             String description,
             double price,
             int vendorId) {
+        
         try {
             final Part part = partDao.find(new PartKey(partNumber, revision));
 
@@ -131,19 +124,26 @@ public class OrderBean implements OrderRemote {
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
+        
     }
 
-    @Override
-    public void createOrder(Integer orderId, char status, int discount, String shipmentInfo) {
+    public void createOrder(char status, int discount, String shipmentInfo) {
         try {
-            final CustomerOrder order = new CustomerOrder(orderId, status, discount, shipmentInfo);
+            final CustomerOrder order = new CustomerOrder(status, discount, shipmentInfo);
             customerOrderDao.persist(order);
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }
     }
+    
+    public void createOrder(CustomerOrder customerOrder) {
+        try {
+            customerOrderDao.persist(customerOrder);
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
+        }
+    }
 
-    @Override
     public List<CustomerOrder> getOrders() {
         try {
             return customerOrderDao.getOrders();
@@ -152,7 +152,6 @@ public class OrderBean implements OrderRemote {
         }
     }
 
-    @Override
     public void addLineItem(Integer orderId, String partNumber, int revision, int quantity) {
         try {
             final CustomerOrder order = customerOrderDao.find(orderId);
@@ -168,7 +167,6 @@ public class OrderBean implements OrderRemote {
         }
     }
 
-    @Override
     public double getBillOfMaterialPrice(String bomPartNumber, int bomRevision, String partNumber, int revision) {
         double price = 0.0;
         try {
@@ -185,7 +183,6 @@ public class OrderBean implements OrderRemote {
         return price;
     }
     
-    @Override
     public double getOrderPrice(Integer orderId) {
         double price = 0.0;
         try {
@@ -197,7 +194,6 @@ public class OrderBean implements OrderRemote {
         return price;
     }
     
-    @Override
     public void adjustOrderDiscount(int adjustment) {
         try {
             final List<CustomerOrder> orders = customerOrderDao.getOrders();
@@ -211,7 +207,6 @@ public class OrderBean implements OrderRemote {
         }
     }
     
-    @Override
     public Double getAvgPrice() {
         try {
             return vendorPartDao.getAvgVendorPartPrice();
@@ -220,7 +215,6 @@ public class OrderBean implements OrderRemote {
         }
     }
     
-    @Override
     public Double getTotalPricePerVendor(int vendorId) {
         try {
             return vendorPartDao.getTotalPricePerVendor(vendorId);
@@ -229,7 +223,6 @@ public class OrderBean implements OrderRemote {
         }
     }
     
-    @Override
     public List<String> locateVendorsByPartialName(String name) {
         final List<String> names = new ArrayList<>();
         
@@ -246,7 +239,6 @@ public class OrderBean implements OrderRemote {
         return names;
     }
     
-    @Override
     public int countAllItems() {
         try {
             return lineItemDao.getNumLineItems();
@@ -255,7 +247,6 @@ public class OrderBean implements OrderRemote {
         }
     }
     
-    @Override
     public List<LineItem> getLineItems(int orderId) {
         try {
             return lineItemDao.getLineItems(orderId);
@@ -264,7 +255,6 @@ public class OrderBean implements OrderRemote {
         }
     }
     
-    @Override
     public void removeOrder(Integer orderId) {
         try {
             final CustomerOrder order = customerOrderDao.find(orderId);
@@ -274,7 +264,6 @@ public class OrderBean implements OrderRemote {
         }
     }
     
-    @Override
     public String reportVendorsByOrder(Integer orderId) {
         final StringBuilder report = new StringBuilder();
         
