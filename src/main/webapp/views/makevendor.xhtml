@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/templates/default.xhtml">
+    <ui:define name="content">
+        <div class="page-header">
+            <h2>Register a vendor</h2>
+        </div>
+
+        <div class="row">
+            
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Register an order</h3>
+                    </div>
+                    <div class="panel-body">
+                        <h:form id="reg" role="form">
+
+                            <div
+                                class="form-group has-feedback #{!name.valid? 'has-error' : ''}">
+                                <h:outputLabel for="name" value="Name" styleClass="control-label"/>
+
+                                <div class="input-group  has-feedback">
+                                    <h:inputText id="name" value="#{newVendor.name}"
+                                                 p:placeholder="Enter a name here" class="form-control"
+                                                 binding="#{name}"/>
+                                    <span
+                                        class="#{!name.valid ? 'glyphicon glyphicon-remove form-control-feedback' : ''}"/>
+                                </div>
+                                <h:message for="name" errorClass="control-label has-error"/>
+                            </div>
+
+                            <div
+                                class="form-group has-feedback #{!address.valid and facesContext.validationFailed? 'has-error' : ''}">
+                                <h:outputLabel for="address" value="Address:"
+                                               styleClass="control-label"/>
+
+                                <div class="input-group  has-feedback">
+                                    <h:inputText id="address" value="#{newVendor.address}"
+                                                 class="form-control" p:placeholder="Enter address"
+                                                 binding="#{address}"/>
+                                    <span
+                                        class="#{!address.valid ? 'glyphicon glyphicon-remove input-group-feedback input-group-addon' : ''}"/>
+                                </div>
+
+                                <h:message for="address" errorClass="control-label has-error"/>
+                            </div>
+
+                            <div
+                                class="form-group has-feedback #{!contact.valid and facesContext.validationFailed? 'has-error' : ''}">
+                                <h:outputLabel for="contact" value="Contact"
+                                               styleClass="control-label"/>
+
+                                <div class="input-group  has-feedback">
+                                    <h:inputText id="contact" value="#{newVendor.contact}"
+                                                 class="form-control" p:placeholder="Enter contact"
+                                                 binding="#{contact}"/>
+                                    <span
+                                        class="#{!contact.valid ? 'glyphicon glyphicon-remove input-group-feedback input-group-addon' : ''}"/>
+                                </div>
+
+                                <h:message for="contact" errorClass="control-label has-error"/>
+                            </div>
+
+                            <div
+                                class="form-group  #{!phone.valid and facesContext.validationFailed? 'has-error' : ''}">
+                                <h:outputLabel for="phone" value="Phone"
+                                               styleClass="control-label"/>
+
+                                <div class="input-group  has-feedback">
+                                    <h:inputText id="phone" value="#{newVendor.phone}"
+                                                 class="form-control" p:placeholder="Enter phone"
+                                                 binding="#{phone}"/>
+                                    <span
+                                        class="#{!phone.valid ? 'glyphicon glyphicon-remove input-group-feedback input-group-addon' : ''}"/>
+                                </div>
+
+                                <h:message for="phone" errorClass="control-label has-error"/>
+                            </div>
+
+                            <div class="form-group">
+
+                                <h:commandButton id="Add"
+                                                 action="#{vendorService.addNewVendor}" value="Add"
+                                                 styleClass="btn btn-primary"/>
+                            </div>
+                            <h:messages styleClass="messages"
+                                        style="list-style: none; padding:0; margin:0;"
+                                        errorClass="alert alert-error" infoClass="alert alert-success"
+                                        warnClass="alert alert-warning" globalOnly="true"/>
+
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Vendors</h2>
+                    </div>
+                    <div class="panel-body">
+                        
+                    </div>
+                    <h:panelGroup rendered="#{empty vendors}">
+                        <em>No vendors added</em>
+                    </h:panelGroup>
+                    <h:dataTable var="vendor" value="#{vendors}"
+                                 rendered="#{not empty vendors}"
+                                 styleClass="table table-hover table-striped ">
+                        <h:column>
+                            <f:facet name="header">Id</f:facet>
+                                #{vendor.vendorId}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Name</f:facet>
+                                #{vendor.name}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Address</f:facet>
+                                #{vendor.address}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Contact</f:facet>
+                                #{vendor.contact}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Phone</f:facet>
+                                #{vendor.phone}
+                        </h:column>
+                    </h:dataTable>
+
+                </div>
+            </div>
+            
+        </div>
+
+    </ui:define>
+</ui:composition>

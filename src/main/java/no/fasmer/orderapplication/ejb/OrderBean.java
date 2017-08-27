@@ -105,6 +105,14 @@ public class OrderBean {
             throw new EJBException(e);
         }
     }
+    
+    public void createVendor(Vendor vendor) {
+        try {
+            vendorDao.persist(vendor);
+        } catch (Exception e) {
+            throw new EJBException(e);
+        }
+    }
 
     public void createVendorPart(String partNumber,
             int revision,
@@ -138,7 +146,9 @@ public class OrderBean {
     
     public void createOrder(CustomerOrder customerOrder) {
         try {
+            logger.log(Level.INFO, "Creating order ...");
             customerOrderDao.persist(customerOrder);
+            logger.log(Level.INFO, "Order created.");
         } catch (Exception e) {
             throw new EJBException(e.getMessage());
         }

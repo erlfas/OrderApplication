@@ -19,7 +19,7 @@
                         <h:form id="reg" role="form">
 
                             <div
-                                class="form-group has-feedback #{!desc.valid? 'has-error' : ''}">
+                                class="form-group has-feedback #{!discount.valid? 'has-error' : ''}">
                                 <h:outputLabel for="discount" value="Discount"
                                                styleClass="control-label"/>
                                 <h:inputText id="discount" value="#{newCustomerOrder.discount}"
@@ -27,7 +27,7 @@
                                              binding="#{discount}"/>
                                 <span
                                     class="#{!discount.valid ? 'glyphicon glyphicon-remove form-control-feedback' : ''}"/>
-                                <h:message for="desc" errorClass="control-label has-error"/>
+                                <h:message for="discount" errorClass="control-label has-error"/>
                             </div>
 
                             <div
