@@ -15,4 +15,11 @@ public class PartDao extends AbstractDao<Part> {
         return em.createNamedQuery("findAllParts").getResultList();
     }
     
+    public byte[] getImage(String revisionNumber, int revision) {
+        return (byte[]) em.createNamedQuery("findImage")
+                .setParameter("pn", revisionNumber)
+                .setParameter("r", revision)
+                .getSingleResult();
+    }
+    
 }

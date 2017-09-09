@@ -1,5 +1,7 @@
 package no.fasmer.orderapplication.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -10,10 +12,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import no.fasmer.orderapplication.dao.PartDao;
 import no.fasmer.orderapplication.ejb.OrderBean;
 import no.fasmer.orderapplication.entity.Part;
-import no.fasmer.orderapplication.mapper.PartMapper;
-import no.fasmer.orderapplication.model.PartModel;
 import static no.fasmer.orderapplication.utils.ExceptionUtils.getRootErrorMessage;
 
 @Model
@@ -28,6 +29,9 @@ public class PartService {
     
     @Inject
     private OrderBean orderBean;
+    
+    @Inject
+    private PartDao partDao;
     
     @Inject
     private List<Part> parts; // cf. PartProducer
@@ -54,6 +58,11 @@ public class PartService {
             final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "Error while saving data");
             facesContext.addMessage(null, m);
         }
+    }
+    
+    public InputStream getImage(String revisionNumber, int revision) {
+        final byte[] image = partDao.getImage(revisionNumber, revision);
+        return new ByteArrayInputStream(image);
     }
     
 }

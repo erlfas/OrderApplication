@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -32,7 +33,10 @@ import org.apache.commons.io.IOUtils;
     @PrimaryKeyJoinColumn(name = "PARTNUMBER", referencedColumnName = "PARTNUMBER"),
     @PrimaryKeyJoinColumn(name = "REVISION", referencedColumnName = "REVISION")
 })
-@NamedQuery(name = "findAllParts", query = "SELECT p FROM Part p ORDER BY p.partNumber")
+@NamedQueries(value = {
+    @NamedQuery(name = "findAllParts", query = "SELECT p FROM Part p ORDER BY p.partNumber"),
+    @NamedQuery(name = "findImage", query = "SELECT p.drawing FROM Part p WHERE p.partNumber = :pn AND p.revision = :r")
+})
 public class Part implements Serializable {
     
     private String partNumber;
@@ -195,6 +199,11 @@ public class Part implements Serializable {
                 
             }
         }
+    }
+    
+    @Transient
+    public String getImageUrl() {
+        return "/OrderApplication/images?partNumber=" + partNumber + "&revision=" + revision;
     }
     
 }
