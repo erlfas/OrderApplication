@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
@@ -33,11 +31,11 @@ import static javax.persistence.TemporalType.DATE;
 @NamedQuery(name = "findAllParts", query = "SELECT p FROM Part p ORDER BY p.partNumber")
 public class Part implements Serializable {
     
-    private Long partNumber;
+    private String partNumber;
     private int revision;
     private String description;
     private Date revisionDate;
-    private Serializable drawing;
+    private byte[] drawing;
     private String specification;
     private Part bomPart;
     private List<Part> parts;
@@ -48,12 +46,14 @@ public class Part implements Serializable {
     }
 
     public Part(
+            String partNumber,
             int revision, 
             String description, 
             Date revisionDate, 
-            Serializable drawing, 
+            byte[] drawing, 
             String specification) {
         
+        this.partNumber = partNumber;
         this.revision = revision;
         this.description = description;
         this.revisionDate = revisionDate;
@@ -64,15 +64,17 @@ public class Part implements Serializable {
     }
 
     public Part(
+            String partNumber,
             int revision, 
             String description, 
             Date revisionDate, 
-            Serializable drawing, 
+            byte[] drawing, 
             String specification, 
             Part bomPart, 
             List<Part> parts, 
             VendorPart vendorPart) {
         
+        this.partNumber = partNumber;
         this.revision = revision;
         this.description = description;
         this.revisionDate = revisionDate;
@@ -85,13 +87,12 @@ public class Part implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    public Long getPartNumber() {
+    public String getPartNumber() {
         return partNumber;
     }
 
-    public void setPartNumber(Long partNumber) {
+    public void setPartNumber(String partNumber) {
         this.partNumber = partNumber;
     }
 
@@ -124,11 +125,11 @@ public class Part implements Serializable {
 
     @Column(table = "PART_DETAIL")
     @Lob
-    public Serializable getDrawing() {
-        return drawing;
+    public byte[] getDrawing() {
+        return this.drawing;
     }
 
-    public void setDrawing(Serializable drawing) {
+    public void setDrawing(byte[] drawing) {
         this.drawing = drawing;
     }
 

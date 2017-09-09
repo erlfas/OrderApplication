@@ -1,6 +1,5 @@
 package no.fasmer.orderapplication.ejb;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -43,16 +42,29 @@ public class OrderBean {
 
     @Inject
     private Logger logger;
+    
+    public void createPart(Part part) {
+        try {
+            partDao.persist(part);
+            logger.log(Level.INFO, "Persisted part");
+        } catch (Exception ex) {
+            throw new EJBException(ex.getMessage());
+        }
+    }
 
-    public void createPart(int revision,
+    public void createPart(
+            String partNumber, 
+            int revision,
             String description,
             Date revisionDate,
             String specification,
-            Serializable drawing) {
+            byte[] drawing) {
 
         try {
 
-            final Part part = new Part(revision,
+            final Part part = new Part(
+                    partNumber,
+                    revision,
                     description,
                     revisionDate,
                     drawing,
@@ -70,7 +82,8 @@ public class OrderBean {
         return partDao.getAllParts();
     }
 
-    public void addPartToBillOfMaterial(String bomPartNumber,
+    public void addPartToBillOfMaterial(
+            String bomPartNumber,
             int bomRevision,
             String partNumber,
             int revision) {
@@ -94,7 +107,8 @@ public class OrderBean {
         }
     }
 
-    public void createVendor(String name,
+    public void createVendor(
+            String name,
             String address,
             String contact,
             String phone) {
@@ -114,7 +128,8 @@ public class OrderBean {
         }
     }
 
-    public void createVendorPart(String partNumber,
+    public void createVendorPart(
+            String partNumber,
             int revision,
             String description,
             double price,
