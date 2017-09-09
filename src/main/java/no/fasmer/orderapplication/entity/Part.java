@@ -1,5 +1,7 @@
 package no.fasmer.orderapplication.entity;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +22,8 @@ import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import static javax.persistence.TemporalType.DATE;
+import javax.persistence.Transient;
+import org.apache.commons.io.IOUtils;
 
 @IdClass(PartKey.class)
 @Entity
@@ -40,6 +44,8 @@ public class Part implements Serializable {
     private Part bomPart;
     private List<Part> parts;
     private VendorPart vendorPart;
+    
+    private javax.servlet.http.Part filePart;
 
     public Part() {
         this.parts = new ArrayList<>();
@@ -134,7 +140,6 @@ public class Part implements Serializable {
     }
 
     @Column(table = "PART_DETAIL")
-    @Lob
     public String getSpecification() {
         return specification;
     }
@@ -172,6 +177,24 @@ public class Part implements Serializable {
 
     public void setVendorPart(VendorPart vendorPart) {
         this.vendorPart = vendorPart;
+    }
+    
+    @Transient
+    public javax.servlet.http.Part getFilePart() {
+        return filePart;
+    }
+
+    public void setFilePart(javax.servlet.http.Part filePart) {
+        this.filePart = filePart;
+        if (this.filePart != null) {
+            try {
+                final InputStream input = this.filePart.getInputStream();
+                final byte[] drawingTemp = IOUtils.toByteArray(input);
+                this.drawing = drawingTemp;
+            } catch (IOException ex) {
+                
+            }
+        }
     }
     
 }

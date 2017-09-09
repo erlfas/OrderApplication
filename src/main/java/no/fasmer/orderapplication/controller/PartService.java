@@ -1,5 +1,6 @@
 package no.fasmer.orderapplication.controller;
 
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Event;
@@ -23,7 +24,7 @@ public class PartService {
     
     @Produces
     @Named
-    private PartModel newPart;
+    private Part newPart;
     
     @Inject
     private OrderBean orderBean;
@@ -32,17 +33,17 @@ public class PartService {
     private List<Part> parts; // cf. PartProducer
     
     @Inject
-    private Event<PartModel> newPartEvent;
+    private Event<Part> newPartEvent;
     
     @PostConstruct
     public void initNewPart() {
-        newPart = new PartModel();
+        newPart = new Part();
     }
     
     public void addNewPart() {
         try {
-            final Part part = PartMapper.map(newPart);
-            orderBean.createPart(part);
+            newPart.setRevisionDate(new Date());
+            orderBean.createPart(newPart);
             
             final FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Done!", "Vendor created");
             facesContext.addMessage(null, m);
