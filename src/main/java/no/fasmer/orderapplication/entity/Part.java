@@ -35,7 +35,8 @@ import org.apache.commons.io.IOUtils;
 })
 @NamedQueries(value = {
     @NamedQuery(name = "findAllParts", query = "SELECT p FROM Part p ORDER BY p.partNumber"),
-    @NamedQuery(name = "findImage", query = "SELECT p.drawing FROM Part p WHERE p.partNumber = :pn AND p.revision = :r")
+    @NamedQuery(name = "findImage", query = "SELECT p.drawing FROM Part p WHERE p.partNumber = :pn AND p.revision = :r"),
+    @NamedQuery(name = "findPartsWithBom", query = "SELECT p FROM Part p WHERE p.bomPart IS NOT NULL")
 })
 public class Part implements Serializable {
     

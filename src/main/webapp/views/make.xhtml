@@ -9,9 +9,10 @@
         <div class="page-header">
             <h2>Make an order</h2>
         </div>
-        
+
         <div class="row">
-            <div class="panel panel-default">
+            <div class="col-md-6">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Make an order</h3>
                     </div>
@@ -32,23 +33,34 @@
 
                             <div
                                 class="form-group  #{!shipmentinfo.valid and facesContext.validationFailed? 'has-error' : ''}">
-                                <h:outputLabel for="shipmentinfo" value="Shipment info:"
-                                               styleClass="control-label"/>
+                                <h:outputLabel for="shipmentinfo" value="Shipment info:" styleClass="control-label"/>
 
                                 <div class="input-group  has-feedback">
-                                    <span class="input-group-addon">$</span>
                                     <h:inputText id="shipmentinfo" value="#{newCustomerOrder.shipmentInfo}"
                                                  class="form-control" p:placeholder="Enter shipment info"
                                                  binding="#{shipmentinfo}"/>
-                                    <span
-                                        class="#{!shipmentinfo.valid ? 'glyphicon glyphicon-remove input-group-feedback input-group-addon' : ''}"/>
+                                    <span class="#{!shipmentinfo.valid ? 'glyphicon glyphicon-remove input-group-feedback input-group-addon' : ''}"/>
                                 </div>
 
                                 <h:message for="shipmentinfo" errorClass="control-label has-error"/>
                             </div>
 
-                            <div class="form-group">
+                            <div
+                                class="form-group  #{!status.valid and facesContext.validationFailed? 'has-error' : ''}">
+                                <h:outputLabel for="status" value="Status:" styleClass="control-label"/>
 
+                                <div class="input-group  has-feedback">
+                                    <h:selectOneMenu id="status" required="true" value="#{newCustomerOrder.status}">
+                                        <f:selectItem itemValue="Y" itemLabel="Complete" />
+                                        <f:selectItem itemValue="N" itemLabel="Pending" />
+                                    </h:selectOneMenu>
+                                    <span class="#{!status.valid ? 'glyphicon glyphicon-remove input-group-feedback input-group-addon' : ''}"/>
+                                </div>
+
+                                <h:message for="status" errorClass="control-label has-error"/>
+                            </div>
+
+                            <div class="form-group">
                                 <h:commandButton id="Add"
                                                  action="#{orderService.addNewOrder}" value="Add"
                                                  styleClass="btn btn-primary"/>
@@ -61,7 +73,48 @@
                         </h:form>
                     </div>
                 </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Orders</h2>
+                    </div>
+                    <div class="panel-body">
+
+                    </div>
+                    <h:panelGroup rendered="#{empty orders}">
+                        <em>No orders added</em>
+                    </h:panelGroup>
+                    <h:dataTable var="order" value="#{orders}"
+                                 rendered="#{not empty orders}"
+                                 styleClass="table table-hover table-striped ">
+                        <h:column>
+                            <f:facet name="header">Order id</f:facet>
+                                #{order.orderId}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Status</f:facet>
+                                #{order.status}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Last update</f:facet>
+                                #{order.lastUpdate}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Discount</f:facet>
+                                #{order.discount}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Shipment info</f:facet>
+                                #{order.shipmentInfo}
+                        </h:column>
+                    </h:dataTable>
+
+                </div>
+            </div>
+
         </div>
-        
+
     </ui:define>
 </ui:composition>

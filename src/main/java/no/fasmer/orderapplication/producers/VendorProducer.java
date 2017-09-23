@@ -1,4 +1,4 @@
-package no.fasmer.orderapplication.control;
+package no.fasmer.orderapplication.producers;
 
 import java.util.List;
 import javax.annotation.PostConstruct;
