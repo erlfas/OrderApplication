@@ -1,4 +1,4 @@
-package no.fasmer.orderapplication.utils;
+package no.fasmer.orderapplication.producers;
 
 import java.util.logging.Logger;
 import javax.enterprise.inject.Produces;

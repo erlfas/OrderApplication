@@ -88,6 +88,7 @@ public class CustomerOrder implements Serializable {
         this.shipmentInfo = shipmentInfo;
     }
 
+    // the join column will be in the LineItem table because of mappedBy
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customerOrder")
     public Collection<LineItem> getLineItems() {
         return lineItems;
