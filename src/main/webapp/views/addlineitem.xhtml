@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/templates/default.xhtml">
+    <ui:define name="content">
+        <div class="page-header">
+            <h2>Add line item to order</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Add line item to order</h3>
+                    </div>
+                    <div class="panel-body">
+                        <h:form id="reg" role="form">
+
+                            <div class="form-group  #{!quantity.valid and facesContext.validationFailed? 'has-error' : ''}">
+                                <h:outputLabel for="quantity" value="Quantity:" styleClass="control-label"/>
+                                <div class="input-group has-feedback">
+                                    <h:inputText id="quantity" value="#{newLineItem.quantity}"
+                                                 class="form-control" p:placeholder="Enter quantity"
+                                                 binding="#{quantity}"/>
+                                    <span class="#{!quantity.valid ? 'glyphicon glyphicon-remove input-group-feedback input-group-addon' : ''}"/>
+                                </div>
+                                <h:message for="quantity" errorClass="control-label has-error"/>
+                            </div>
+                            
+                            <div class="form-group  #{!partNumber.valid and facesContext.validationFailed? 'has-error' : ''}">
+                                <h:outputLabel for="partNumber" value="Part number:" styleClass="control-label"/>
+                                <div class="input-group has-feedback">
+                                    <h:inputText id="partNumber" value="#{newLineItem.partNumber}"
+                                                 class="form-control" p:placeholder="Enter part number"
+                                                 binding="#{partNumber}"/>
+                                    <span class="#{!partNumber.valid ? 'glyphicon glyphicon-remove input-group-feedback input-group-addon' : ''}"/>
+                                </div>
+                                <h:message for="partNumber" errorClass="control-label has-error"/>
+                            </div>
+                            
+                            <div class="form-group  #{!revision.valid and facesContext.validationFailed? 'has-error' : ''}">
+                                <h:outputLabel for="revision" value="Revision:" styleClass="control-label"/>
+                                <div class="input-group has-feedback">
+                                    <h:inputText id="revision" value="#{newLineItem.revision}"
+                                                 class="form-control" p:placeholder="Enter revision"
+                                                 binding="#{revision}"/>
+                                    <span class="#{!revision.valid ? 'glyphicon glyphicon-remove input-group-feedback input-group-addon' : ''}"/>
+                                </div>
+                                <h:message for="revision" errorClass="control-label has-error"/>
+                            </div>
+                            
+                            <div class="form-group  #{!orderId.valid and facesContext.validationFailed? 'has-error' : ''}">
+                                <h:outputLabel for="orderId" value="Order id:" styleClass="control-label"/>
+                                <div class="input-group has-feedback">
+                                    <h:inputText id="orderId" value="#{newLineItem.orderId}"
+                                                 class="form-control" p:placeholder="Enter order id"
+                                                 binding="#{orderId}"/>
+                                    <span class="#{!orderId.valid ? 'glyphicon glyphicon-remove input-group-feedback input-group-addon' : ''}"/>
+                                </div>
+                                <h:message for="orderId" errorClass="control-label has-error"/>
+                            </div>
+
+                            <div class="form-group">
+                                <h:commandButton id="Add"
+                                                 action="#{lineItemService.addNewLineItem}" value="Add"
+                                                 styleClass="btn btn-primary"/>
+                            </div>
+                            <h:messages styleClass="messages"
+                                        style="list-style: none; padding:0; margin:0;"
+                                        errorClass="alert alert-error" infoClass="alert alert-success"
+                                        warnClass="alert alert-warning" globalOnly="true"/>
+
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Line items</h2>
+                    </div>
+                    <div class="panel-body">
+
+                    </div>
+                    <h:panelGroup rendered="#{empty lineItems}">
+                        <em>No line items added</em>
+                    </h:panelGroup>
+                    <h:dataTable var="lineItem" value="#{lineItems}"
+                                 rendered="#{not empty lineItems}"
+                                 styleClass="table table-hover table-striped ">
+                        <h:column>
+                            <f:facet name="header">Quantity</f:facet>
+                                #{lineItem.orderId}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Part number</f:facet>
+                                #{lineItem.partNumber}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Revision</f:facet>
+                                #{lineItem.revision}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Order id</f:facet>
+                                #{lineItem.orderId}
+                        </h:column>
+                    </h:dataTable>
+
+                </div>
+            </div>
+
+        </div>
+
+    </ui:define>
+</ui:composition>
