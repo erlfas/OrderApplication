@@ -21,6 +21,7 @@ import no.fasmer.orderapplication.entity.Part;
 import no.fasmer.orderapplication.entity.PartKey;
 import no.fasmer.orderapplication.entity.Vendor;
 import no.fasmer.orderapplication.entity.VendorPart;
+import no.fasmer.orderapplication.vo.VendorPartVO;
 
 @Stateless
 public class OrderBean {
@@ -125,6 +126,21 @@ public class OrderBean {
             vendorDao.persist(vendor);
         } catch (Exception e) {
             throw new EJBException(e);
+        }
+    }
+    
+    public void createVendorPart(VendorPartVO vendorPartVO) {
+        try {
+            final Part part = partDao.find(new PartKey(vendorPartVO.getPartNumber(), vendorPartVO.getRevision()));
+
+            final VendorPart vendorPart = new VendorPart(vendorPartVO.getDescription(), vendorPartVO.getPrice(), part);
+            vendorPartDao.persist(vendorPart);
+
+            final Vendor vendor = vendorDao.find(vendorPartVO.getVendorId());
+            vendor.addVendorPart(vendorPart);
+            vendorPart.setVendor(vendor);
+        } catch (Exception e) {
+            throw new EJBException(e.getMessage());
         }
     }
 
